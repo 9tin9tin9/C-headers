@@ -103,15 +103,15 @@ HMap_sdbm(const char *str){
             break; \
         } \
         size_t __hmap_index = __HMap_index(__hmap, __key); \
-        FList_remove_if(__hmap[__hmap_index], \
-            !strcmp( \
+        HMap_entry(__HMap_type(__hmap)) __hmap_entry = HMap_at(__hmap, __key); \
+        FList_remove_if(__hmap[__hmap_index], !strcmp( \
                 HMap_entry_key( \
                     *(FList_iter(HMap_entry(__HMap_type(__hmap))))__flist_it), \
                 (__key))); \
     }while(0)
 
 #define HMap_at(__hmap, __key) \
-    *(__HMap_type(__hmap)*)__HMap_at((void**)(__hmap), (__key))
+    (*(__HMap_type(__hmap)*)__HMap_at((void**)(__hmap), (__key)))
 
 #define HMap_begin(__hmap) \
     FList_begin( \
@@ -139,7 +139,6 @@ HMap_sdbm(const char *str){
 #define HMap_entry_del(__entry) \
     do { \
         free(HMap_entry_key(__entry)); \
-        free(&HMap_entry_val(__entry)); \
         free(__HMap_entry_basePtr(__entry)); \
     }while(0)
 
@@ -147,7 +146,7 @@ HMap_sdbm(const char *str){
     (__HMap_entry_basePtr(__entry)[0])
 
 #define HMap_entry_val(__entry) \
-    (*(__typeof__(__entry))(__HMap_entry_basePtr(__entry)[1]))
+    (*(__entry))
 
 
 
@@ -220,7 +219,7 @@ __HMap_at(void** hmap, const char* key){
         FList_iter_next(it))
     {
         if (!strcmp(HMap_entry_key(*it), key)){
-            return (*it)[1];
+            return *it;
         }
     }
     assert(0);
@@ -229,10 +228,10 @@ __HMap_at(void** hmap, const char* key){
 
 static inline char**
 __HMap_entry_new(const char* key, void* data, size_t size){
-    char** ptr = calloc(2, sizeof(void*)); assert(ptr);
+    size_t entrySize = sizeof(void*) + size;
+    char** ptr = calloc(2, entrySize); assert(ptr);
     ptr[0] = strdup(key); assert(ptr[0]);
-    ptr[1] = calloc(1, size); assert(ptr[1]);
-    memcpy(ptr[1], data, size);
+    memcpy(&ptr[1], data, size);
     return (char**)ptr + 1;
 }
 
