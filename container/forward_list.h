@@ -123,4 +123,7 @@
 #define __FList_basePtr(__flist) \
     (__flist ? (&((void**)(__flist))[-1]) : NULL)
 
+#define __FList_nextPointer(__flist) \
+    (__FList_basePtr(__flist)[0])
+
 #endif

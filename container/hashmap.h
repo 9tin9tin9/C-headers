@@ -11,6 +11,7 @@
 //
 // Entry: type* / char**
 // (char*)key, (type) data
+//             ^ user pointer
 //
 // Keys are char* only
 
@@ -121,11 +122,11 @@ HMap_sdbm(const char *str){
     ((HMap_iter(__HMap_type(__hmap)))NULL)
 
 #define HMap_iter_next(__iter, __hmap) \
-    ((__iter) = __FList_basePtr(__iter)[0] == FList_end(__iter) ? \
+    ((__iter) = __FList_nextPointer(__iter) == FList_end(__iter) ? \
         FList_begin(__HMap_nextNonEmptyBucket( \
             (void**)(__hmap), \
             __HMap_index(__hmap, HMap_entry_key(*(__iter))) + 1)) : \
-        __FList_basePtr(__iter)[0])
+        __FList_nextPointer(__iter))
 
 #define HMap_entry(__type) __type*
 
@@ -137,16 +138,16 @@ HMap_sdbm(const char *str){
 
 #define HMap_entry_del(__entry) \
     do { \
-        free((__entry)[0]); \
-        free((__entry)[1]); \
-        free((__entry)); \
+        free(HMap_entry_key(__entry)); \
+        free(&HMap_entry_val(__entry)); \
+        free(__HMap_entry_basePtr(__entry)); \
     }while(0)
 
 #define HMap_entry_key(__entry) \
-    (((char**)(__entry))[0])
+    (__HMap_entry_basePtr(__entry)[0])
 
 #define HMap_entry_val(__entry) \
-    (*(__typeof__(__entry))((char**)(__entry))[1])
+    (*(__typeof__(__entry))(__HMap_entry_basePtr(__entry)[1]))
 
 
 
@@ -208,6 +209,9 @@ __HMap_nextNonEmptyBucket(void** hmap, size_t from){
         (__hmap) = (HMap(__HMap_type(__hmap)))__hmap_base; \
     }while(0)
 
+#define __HMap_entry_basePtr(__entry) \
+    ((__entry) ? &((char**)(__entry))[-1] : NULL)
+
 static inline void*
 __HMap_at(void** hmap, const char* key){
     size_t index = __HMap_index(hmap, key);
@@ -215,7 +219,7 @@ __HMap_at(void** hmap, const char* key){
         it != FList_end(hmap[index]);
         FList_iter_next(it))
     {
-        if (!strcmp((*it)[0], key)){
+        if (!strcmp(HMap_entry_key(*it), key)){
             return (*it)[1];
         }
     }
@@ -229,7 +233,7 @@ __HMap_entry_new(const char* key, void* data, size_t size){
     ptr[0] = strdup(key); assert(ptr[0]);
     ptr[1] = calloc(1, size); assert(ptr[1]);
     memcpy(ptr[1], data, size);
-    return ptr;
+    return (char**)ptr + 1;
 }
 
 #endif
