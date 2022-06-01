@@ -3,12 +3,17 @@
 
 #include <stdio.h>
 
-// print can only accept up to 19 arguments
+// only accept up to 19 arguments
 #define print(...) \
     (__PRINT_MAP(__PRINT_WRAP_PRINTF, __VA_ARGS__) 0)
 
+// prints '\n' at the end
 #define println(...) \
     (__PRINT_MAP(__PRINT_WRAP_PRINTF, __VA_ARGS__) putc('\n', stdout), 0)
+
+// arguments are space separated
+#define printspc(...) \
+    (__PRINT_MAP(__PRINT_WRAP_PRINTF_SPACE, __VA_ARGS__) 0)
 
 
 #define __print_fmt(x) _Generic((x), \
@@ -36,6 +41,8 @@
         default: "(Unknown type)")
 
 #define __PRINT_WRAP_PRINTF(x) printf(__print_fmt(x), x),
+
+#define __PRINT_WRAP_PRINTF_SPACE(x) __PRINT_WRAP_PRINTF(x) putc(' ', stdout),
 
 #define __PRINT_COUNT(...) \
             __PRINT_COUNT_(__VA_ARGS__, __PRINT_NUM())
