@@ -1,10 +1,6 @@
 #include <stdio.h>
-#include "container/str.h"
+#include "utility/print.h"
 
 int main(){
-    Str s = Str_new();
-    Str_copy(s, "abcd");
-    puts(s);
-    Str_append(s, "efgh");
-    puts(s);
+    println(10, (char)' ',  23.4, " asd");
 }
