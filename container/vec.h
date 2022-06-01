@@ -58,6 +58,13 @@
         __vec_ptr[0]--; \
     }while(0)
 
+#define Vec_reserve(__vec, __count) \
+    do { \
+        if (Vec_capacity(__vec) < (__count)) { \
+            __Vec_grow((__vec), (__count)); \
+        } \
+    }while(0)
+
 #define Vec_begin(__vec) \
     (__vec)
 
@@ -89,8 +96,7 @@
     do { \
         size_t __vec_count = (__count); \
         assert(__vec_count >= Vec_size(__vec)); \
-        size_t __vec_size = \
-            sizeof(size_t)*2 + __vec_count*sizeof(*(__vec)); \
+        size_t __vec_size = sizeof(size_t)*2 + __vec_count*sizeof(*(__vec)); \
         size_t* __vec_ptr; \
         if ((__vec)) { \
             __vec_ptr = __Vec_basePtr(__vec); \
