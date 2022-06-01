@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "utility/print.h"
 
 int main(){
