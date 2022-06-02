@@ -40,7 +40,30 @@
         void*: "%p", \
         default: "(Unknown type)")
 
-#define __PRINT_WRAP_PRINTF(x) printf(__print_fmt(x), x),
+#define __print_arg(x) _Generic((x), \
+        unsigned char: (x), \
+        char: (x), \
+        signed char: (x), \
+        \
+        _Bool: (x), \
+        short int: (x), \
+        unsigned short int: (x), \
+        int: (x), \
+        unsigned int: (x), \
+        \
+        long int: (x), \
+        unsigned long int: (x), \
+        long long int: (x), \
+        unsigned long long int: (x), \
+        \
+        float: (x), \
+        double: (x), \
+        long double: (x), \
+        \
+        char*: (x), \
+        void*: (x))
+
+#define __PRINT_WRAP_PRINTF(x) printf(__print_fmt(x), __print_arg(x)),
 
 #define __PRINT_WRAP_PRINTF_SPACE(x) __PRINT_WRAP_PRINTF(x) putc(' ', stdout),
 
