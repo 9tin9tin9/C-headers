@@ -23,9 +23,9 @@
 
 #define Str char*
 
-#define Str_iter char*
+#define Str_iter(_) char*
 
-#define Str_citer const char*
+#define Str_citer(_) const char*
 
 #define Str_new() ((char*)NULL)
 
@@ -103,6 +103,8 @@
 
 #define __Str_basePtr(__str) \
     ((__str) ? &((size_t*)(__str))[-2] : NULL)
+
+#define __Str_type(_) char
 
 #define __Str_nextGrowSize(__str) \
     ((__str) ? Str_capacity(__str) << 1 : 1)
