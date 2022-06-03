@@ -10,11 +10,11 @@ int main(){
     Vec_push_back(a, 30);
     Vec_push_back(a, 40);
 
-    forrange(i, 0, Vec_size(a)){
+    foreach_range(i, 0, Vec_size(a)){
         println(Vec_at(a, i));
     }
 
-    foriter(Vec, it, a){
+    foreach_iter(Vec, it, a){
         println(*it);
     }
 }
