@@ -1,20 +1,17 @@
-#include "container/str.h"
+#include <stdlib.h>
+#include <string.h>
 #include "utility/print.h"
-#include "container/vec.h"
 #include "utility/for.h"
+#include "container/vec.h"
 
 int main(){
     Vec(int) a = Vec_new(int);
-    Vec_push_back(a, 10);
-    Vec_push_back(a, 20);
-    Vec_push_back(a, 30);
-    Vec_push_back(a, 40);
+    Vec(int) b = Vec_new(int, -1, -2, -3);
+    Vec_insert(a, 0, Vec_begin(b), Vec_end(b), ++);
+    Vec_insert(a, 2, b, b+Vec_size(b), Vec_iter_next);
+    Vec_del(b);
 
-    foreach_range(i, 0, Vec_size(a)){
-        println(Vec_at(a, i));
-    }
-
-    foreach_iter(Vec, it, a){
-        println(*it);
+    foreach_iter(Vec, a, it) {
+        printsp(*it);
     }
 }
