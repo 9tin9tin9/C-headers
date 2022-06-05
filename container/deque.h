@@ -129,7 +129,7 @@ __Deque_assert(int cond, const char* expr, const char* file, int line){
         size_t __deque_count = (__count); \
         Deque_assert(__deque_count >= Deque_size(__deque)); \
         size_t __deque_size = \
-            sizeof(size_t)*4 + __deque_count*sizeof(*(__deque)); \
+            sizeof(size_t)*4 + __deque_count*sizeof(__typeof__(*(__deque))); \
         size_t* __deque_ptr; \
         if ((__deque)) { \
             __deque_ptr = calloc(1, __deque_size); \

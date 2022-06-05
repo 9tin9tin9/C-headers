@@ -125,7 +125,8 @@
 #define __Vec_grow(__vec, __count) \
     do { \
         size_t __vec_count = (__count); \
-        size_t __vec_size = sizeof(size_t)*2 + __vec_count*sizeof(*(__vec)); \
+        size_t __vec_size = sizeof(size_t)*2 + \
+            __vec_count*sizeof(__typeof__(*(__vec))); \
         size_t* __vec_ptr; \
         if ((__vec)) { \
             __vec_ptr = __Vec_basePtr(__vec); \
