@@ -11,6 +11,6 @@
 
 // Only use it when you are sure the array ends with NULL
 #define foreach_untilNull(var, start) \
-    for (__typeof__(start) var; *var != NULL; var++)
+    for (__typeof__(*(start))* var; *var != NULL; var++)
 
 #endif
