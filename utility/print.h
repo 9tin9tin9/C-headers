@@ -3,6 +3,18 @@
 
 #include <stdio.h>
 
+#define Binary(...) \
+    ((struct __PrintBitsBinary){ \
+        .data = (unsigned char*)(__typeof__(__VA_ARGS__)[]){ (__VA_ARGS__) }, \
+        .len = sizeof(__typeof__(__VA_ARGS__)), \
+    })
+
+#define Hexadecimal(...) \
+    ((struct __PrintBitsHexadecimal){ \
+        .data = (unsigned char*)(__typeof__(__VA_ARGS__)[]){ (__VA_ARGS__) }, \
+        .len = sizeof(__typeof__(__VA_ARGS__)), \
+    })
+
 // only accept up to 19 arguments
 #define print(...) \
     (__PRINT_MAP(__PRINT_WRAP_PRINTF, __VA_ARGS__) 0)
@@ -38,6 +50,9 @@
         \
         char*: "%s", \
         void*: "%p", \
+        \
+        struct __PrintBitsBinary: "%n", \
+        struct __PrintBitsHexadecimal: "%n", \
         default: "(Unknown type)")
 
 #define __print_arg(x) _Generic((x), \
@@ -61,7 +76,11 @@
         long double: (x), \
         \
         char*: (x), \
-        void*: (x))
+        void*: (x), \
+        struct __PrintBitsBinary: \
+            __printbits_binary((struct __PrintBitsBinary*)&(x)), \
+        struct __PrintBitsHexadecimal: \
+            __printbits_hexadecimal((struct __PrintBitsHexadecimal*)&(x))) \
 
 #define __PRINT_WRAP_PRINTF(x) printf(__print_fmt(x), __print_arg(x)),
 
@@ -107,5 +126,36 @@
 
 #define __PRINT_MAP(map, ...) \
     __PRINT_MAP_(__PRINT_COUNT(__VA_ARGS__), map, __VA_ARGS__)
+
+struct __PrintBitsBinary{
+    unsigned char* data;
+    size_t len;
+};
+
+struct __PrintBitsHexadecimal{
+    unsigned char* data;
+    size_t len;
+};
+
+static inline int*
+__printbits_binary(struct __PrintBitsBinary* binary){
+    for (int i = binary->len-1; i >= 0; i--){
+        for (int j = 7; j >= 0; j--){
+            unsigned char c = binary->data[i];
+            c <<= 7-j;
+            c >>= 7;
+            putc(c + '0', stdout);
+        }
+    }
+    return 0;
+}
+
+static inline int*
+__printbits_hexadecimal(struct __PrintBitsHexadecimal* hex){
+    for (int i = hex->len-1; i >= 0; i--){
+        printf("%x", hex->data[i]);
+    }
+    return 0;
+}
 
 #endif
