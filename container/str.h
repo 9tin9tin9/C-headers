@@ -29,6 +29,8 @@
 
 #define Str_new() ((char*)NULL)
 
+#define Str_from(...) __Str_from(__VA_ARGS__)
+
 #define Str_del(__str) \
     Str_free(__Str_basePtr(__str))
 
@@ -80,7 +82,7 @@
 #define Str_cend(__str) \
     ((const char*)Str_end(__str))
 
-#define Str_iter_next(__iter) \
+#define Str_iter_next(__iter, ...) \
     ((__iter)++)
 
 #define Str_copy(__str, __from) \
@@ -125,5 +127,11 @@
         __str_ptr[1] = __str_count; \
         (__str) = (char*)(&__str_ptr[2]); \
     }while(0)
+
+char* __Str_from(char* src){
+    Str s = Str_new();
+    Str_copy(s, src);
+    return s;
+}
 
 #endif

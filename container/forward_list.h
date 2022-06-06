@@ -65,7 +65,7 @@
 #define FList_cend(__flist) \
     (NULL)
 
-#define FList_iter_next(__iter) \
+#define FList_iter_next(__iter, ...) \
     ((__iter) = __FList_basePtr(__iter)[0])
 
 #define FList_remove(__flist, __value) \

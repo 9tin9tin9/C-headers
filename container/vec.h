@@ -101,7 +101,7 @@
 #define Vec_cend(__vec) \
     ((const __Vec_type(__vec)*)Vec_end(__vec))
 
-#define Vec_iter_next(__iter) \
+#define Vec_iter_next(__iter, ...) \
     ((__iter)++)
 
 

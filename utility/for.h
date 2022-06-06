@@ -7,7 +7,7 @@
 #define foreach_iter(type, container, var) \
     for (type##_iter(__##type##_type(container)) var = type##_begin(container); \
         var != type##_end(container); \
-        type##_iter_next(var))
+        type##_iter_next(var, container))
 
 // Only use it when you are sure the array ends with NULL
 #define foreach_untilNull(var, start) \
