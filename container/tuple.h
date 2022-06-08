@@ -124,21 +124,6 @@ static inline void Tuple_del(Tuple* tuple){
     memset(tuple, 0, sizeof(Tuple));
 }
 
-#define TupleIter(t) \
-    (TupleIter){ \
-        .base = NULL, \
-        .tuple = (t), \
-        .idx = -1, \
-    }
-
-static inline const char*
-_TupleIter_next(TupleIter* iter)
-{
-    return iter->base = _Tuple_at(iter->tuple, ++iter->idx);
-}
-
-#define TupleIter_next(iter, type) (type*)_TupleIter_next((iter))
-
 #endif
 
 #endif

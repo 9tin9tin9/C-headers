@@ -53,7 +53,7 @@
         \
         struct __PrintBitsBinary: "%n", \
         struct __PrintBitsHexadecimal: "%n", \
-        default: "(Unknown type)")
+        default: "(Unknown type)%n")
 
 #define __print_arg(x) _Generic((x), \
         unsigned char: (x), \
@@ -78,9 +78,10 @@
         char*: (x), \
         void*: (x), \
         struct __PrintBitsBinary: \
-            __printbits_binary((struct __PrintBitsBinary*)&(x)), \
+            __printbits_binary((struct __PrintBitsBinary*)(__typeof__(x)[]){ (x) }), \
         struct __PrintBitsHexadecimal: \
-            __printbits_hexadecimal((struct __PrintBitsHexadecimal*)&(x))) \
+            __printbits_hexadecimal((struct __PrintBitsHexadecimal*)(__typeof__(x)[]){ (x) }), \
+        default: (int*)(NULL)) \
 
 #define __PRINT_WRAP_PRINTF(x) printf(__print_fmt(x), __print_arg(x)),
 

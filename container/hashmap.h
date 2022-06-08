@@ -110,8 +110,10 @@ HMap_sdbm(const char *str){
                 (__key))); \
     }while(0)
 
+// returns NULL if not exists
+// else return pointer to HMap_entry
 #define HMap_at(__hmap, __key) \
-    (*(__HMap_type(__hmap)*)__HMap_at((void**)(__hmap), (__key)))
+    ((__HMap_type(__hmap)*)__HMap_at((void**)(__hmap), (__key)))
 
 #define HMap_begin(__hmap) \
     FList_begin( \
@@ -213,6 +215,8 @@ __HMap_nextNonEmptyBucket(void** hmap, size_t from){
 
 static inline void*
 __HMap_at(void** hmap, const char* key){
+    if (!hmap) { return NULL; }
+
     size_t index = __HMap_index(hmap, key);
     for (FList_iter(char**) it = FList_begin(hmap[index]);
         it != FList_end(hmap[index]);
@@ -222,7 +226,6 @@ __HMap_at(void** hmap, const char* key){
             return *it;
         }
     }
-    assert(0);
     return NULL;
 }
 

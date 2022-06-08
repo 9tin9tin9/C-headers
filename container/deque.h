@@ -41,7 +41,11 @@ __Deque_assert(int cond, const char* expr, const char* file, int line){
 
 #define Deque_citer(__type) const __type*
 
-#define Deque_new(__type) ((Deque(__type))NULL)
+#define Deque_new(__type, ...) \
+    ((Deque(__type))__Deque_new( \
+        sizeof((__type[]){__VA_ARGS__}) / sizeof(__type) + 1, \
+        sizeof(__type), \
+        (__type[]){__VA_ARGS__}))
 
 #define Deque_del(__deque) \
     Deque_free(__Deque_basePtr(__deque))
@@ -61,7 +65,7 @@ __Deque_assert(int cond, const char* expr, const char* file, int line){
 
 #define Deque_push_front(__deque, ...) \
     do { \
-        if (Deque_size(__deque) >= Deque_capacity(__deque)) { \
+        if (Deque_size(__deque) + 1 >= Deque_capacity(__deque)) { \
             __Deque_grow((__deque), __Deque_nextGrowSize(__deque)); \
         } \
         size_t* __deque_ptr = __Deque_basePtr(__deque); \
@@ -72,7 +76,7 @@ __Deque_assert(int cond, const char* expr, const char* file, int line){
 
 #define Deque_push_back(__deque, ...) \
     do { \
-        if (Deque_size(__deque) >= Deque_capacity(__deque)) { \
+        if (Deque_size(__deque) + 1 >= Deque_capacity(__deque)) { \
             __Deque_grow((__deque), __Deque_nextGrowSize(__deque)); \
         } \
         size_t* __deque_ptr = __Deque_basePtr(__deque); \
@@ -101,7 +105,9 @@ __Deque_assert(int cond, const char* expr, const char* file, int line){
     ((__deque) ? &(__deque)[__Deque_basePtr(__deque)[2]] : NULL)
 
 #define Deque_end(__deque) \
-    ((__deque) ? &(__deque)[(__Deque_basePtr(__deque)[3] + 1) % Deque_capacity(__deque)] : NULL)
+    ((__deque) ? \
+        &(__deque)[(__Deque_basePtr(__deque)[3] + 1) % Deque_capacity(__deque)] : \
+        NULL)
 
 #define Deque_cbegin(__deque) \
     ((const __Deque_type(__deque)*)Deque_begin(__deque))
@@ -111,7 +117,7 @@ __Deque_assert(int cond, const char* expr, const char* file, int line){
 
 #define Deque_iter_next(__iter, __deque) \
     ((__iter) = &(__deque)[ \
-        ((__iter + 1) - (__deque)) % Deque_capacity(__deque)])
+        ((__iter) + 1 - (__deque)) % Deque_capacity(__deque)])
 
 
 
@@ -150,5 +156,19 @@ __Deque_assert(int cond, const char* expr, const char* file, int line){
         __deque_ptr[1] = __deque_count; \
         (__deque) = (__Deque_type(__deque)*)(&__deque_ptr[4]); \
     }while(0)
+
+static inline void* __Deque_new(size_t count, size_t size, void* data){
+    if (!count) return NULL;
+
+    size_t dequesize = sizeof(size_t)*4 + size * count;
+    size_t* d = Deque_calloc(1, dequesize);
+
+    d[0] = count-1;
+    d[1] = count;
+    d[3] = count-2;
+    memcpy(d+4, data, size * count);
+
+    return d+4;
+}
 
 #endif

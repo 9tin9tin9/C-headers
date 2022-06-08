@@ -49,7 +49,7 @@
 #define FList_pop_front(__flist) \
     do { \
         void* next = __FList_basePtr(__flist)[0]; \
-        free((__flist)); \
+        free(__FList_basePtr(__flist)); \
         (__flist) = next; \
     }while(0)
 

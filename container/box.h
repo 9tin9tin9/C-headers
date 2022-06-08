@@ -26,4 +26,6 @@ xmalloc(size_t size)
         (__typeof__(c_)[]){(c_)}, \
         sizeof(__typeof__(c_))) \
 
+#undef fatal
+
 #endif
