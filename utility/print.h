@@ -24,8 +24,8 @@
     (__PRINT_MAP(__PRINT_WRAP_PRINTF, __VA_ARGS__) putc('\n', stdout), 0)
 
 // arguments are space separated
-#define printsp(...) \
-    (__PRINT_MAP(__PRINT_WRAP_PRINTF_SPACE, __VA_ARGS__) 0)
+#define printspc(...) \
+    (__PRINT_MAP(__PRINT_WRAP_PRINTF_SPACE, __VA_ARGS__) putc('\b', stdout), 0)
 
 
 #define __print_fmt(x) _Generic((x), \
