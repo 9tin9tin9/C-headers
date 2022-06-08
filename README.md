@@ -93,3 +93,36 @@ for(FList_iter(double) it = FList_begin(flist);
 
 FList_del(flist);
 ```
+
+## Utilities
+
+### for
+```C
+foreach_range(i, 0, 10){
+    printf("%d ", i); // 0 1 2 3 4 5 6 7 8 9
+}
+putc('\n', stdout);
+
+Vec(int) vec = Vec_new(int, 5, 3, 6, 7);
+foreach_iter(Vec, it, vec){
+    printf("%d ", *it);  // 5 3 6 7
+}
+putc('\n', stdout);
+
+char* strings[] = { "first", "second", "third", NULL };
+foreach_untilNull(string, strings){
+    printf("%s ", *string);  // first second third
+}
+putc('\n', stdout);
+```
+
+### print
+```C
+print("first", 2, 3.0, (char)'4', "\n");  // first23.0000004\n
+printspc("first", 2, 3.0, (char)'4', "\n"); // first 2 3.000000 4\n
+println("first", 2, 3.0, (char)'4');  // first23.0000004\n
+```
+
+### opts
+```C
+```

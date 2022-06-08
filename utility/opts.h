@@ -20,8 +20,8 @@ HMap(Vec(char*))
 parseOpt(
     int argc,
     char** argv,
-    struct ParseOpt_Opt* opts,
-    char*** nonOptArg)
+    char*** nonOptArg,
+    struct ParseOpt_Opt* opts)
 {
     HMap(Vec(char*)) result = HMap_new(Vec(char*));
     bool usedArgv[argc];
