@@ -24,7 +24,7 @@
     (__PRINT_MAP(__PRINT_WRAP_PRINTF, __VA_ARGS__) putc('\n', stdout), 0)
 
 // arguments are space separated
-#define printspc(...) \
+#define printsp(...) \
     (__PRINT_MAP(__PRINT_WRAP_PRINTF_SPACE, __VA_ARGS__) putc('\b', stdout), 0)
 
 
