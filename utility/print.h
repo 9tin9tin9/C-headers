@@ -33,7 +33,7 @@
         char: "%c", \
         signed char: "%c", \
         \
-        _Bool: "%d", \
+        _Bool: "%s", \
         short int: "%hd", \
         unsigned short int: "%hu", \
         int: "%d", \
@@ -60,7 +60,7 @@
         char: (x), \
         signed char: (x), \
         \
-        _Bool: (x), \
+        _Bool: (x) ? "true" : "false", \
         short int: (x), \
         unsigned short int: (x), \
         int: (x), \

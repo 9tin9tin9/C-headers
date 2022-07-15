@@ -3,11 +3,14 @@
 #include "container/hashmap.h"
 #include "container/optional.h"
 
-int main(int argc, char** argv){
-    Optional(int) a = Optional_wrap(10);
-    Optional(int) b = Optional_wrap(20);
-    Optional(int) c = a;
+Optional(int) fun(){
+    int a = 10;
+    return Optional_wrap(a);
+}
 
-    printsp(Optional_value(c), Optional_value(a));
+int main(int argc, char** argv){
+    Optional(int) a = fun();
+    Optional(int) b = fun();
+    println(Optional_value(a), (char)' ', Optional_value(b));
     return 0;
 }
