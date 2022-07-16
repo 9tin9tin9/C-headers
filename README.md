@@ -119,7 +119,7 @@ putc('\n', stdout);
 ### print
 ```C
 print("first", 2, 3.0, (char)'4', "\n");  // first23.0000004\n
-printspc("first", 2, 3.0, (char)'4', "\n"); // first 2 3.000000 4\n
+printsp("first", 2, 3.0, (char)'4', "\n"); // first 2 3.000000 4\n
 println("first", 2, 3.0, (char)'4');  // first23.0000004\n
 ```
 
